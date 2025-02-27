@@ -232,7 +232,7 @@ with col1:
 with col2:
     st.markdown("""
         <div style="text-align: left; background: linear-gradient(90deg, #3C1053, #3498DB); padding: 20px; border-radius: 10px; margin-bottom: 15px;">
-            <h1 style="color: #FFD700; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 32px; font-weight: 600;">
+            <h1 style="color: #FFD700; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 30px; font-weight: 600;">
                 Telco ChurnXpert – A smart churn prediction & analytics tool
             </h1>
         </div>
