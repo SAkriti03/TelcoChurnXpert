@@ -232,7 +232,7 @@ with col1:
 with col2:
     st.markdown("""
         <div style="text-align: left; background: linear-gradient(90deg, #3C1053, #3498DB); padding: 20px; border-radius: 10px; margin-bottom: 15px;">
-            <h1 style="color: #FFD700; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 30px; font-weight: 600;">
+            <h1 style="color: #FFD700; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 38px; font-weight: 600;">
                 Telco ChurnXpert – A smart churn prediction & analytics tool
             </h1>
         </div>
@@ -368,7 +368,7 @@ def visualize_data(df):
 st.sidebar.title("Navigation")
 #Sidebar options for navigation
 option = st.sidebar.radio("🔍 Choose Analysis", 
-    ["📊 Data Insights Hub","🎨Smart Data Visuals", "🤖 Churn Explore & Predict", "📈 Model Evaluation"])
+    ["📊 Data Insights Hub","🎨Smart Data Visuals", "🤖 Churn Explore & Predict", "🧩Client Persona Evaluation","📈 Model Evaluation"])
 #option = st.sidebar.radio("Go to", ["Customer Profile Analysis", "Visualizations", "Churn Risk Assessment","🔍 Interactive Data Exploration", "Churn Prediction"])
 
 # Page1 Customer Profile Analysis
@@ -803,7 +803,65 @@ elif option == "🤖 Churn Explore & Predict":
         st.write(f"Confidence: {prob*100:.2f}%")
         st.markdown(f"<h3 style='color:{'#f0f' if prediction == 1 else '#0ff'}'>{result}</h3>", unsafe_allow_html=True)
 
-#Page 4 Model Evaluation
+
+#Page 4 Client Person EvaluationPage
+if option == "🧩Client Persona Evaluation":
+    st.title("🧩Client Persona Evaluation: Decoding Your Audience")
+    
+    st.markdown("""
+    Unlock the Why Behind the Buy: Turn Data into Retention Wins
+    """)
+    
+    # Create selection buttons
+    graph_option = st.radio("📊 Select the visualization to display:",
+                        ["👥 Gender-Based Churn Analysis",
+                         "📈 Tenure vs. Monthly Charges",
+                         "📃 Contract Type & Churn Trends",
+                         "💰 Preferred Payment Methods"])
+
+   # Display selected graph
+    if graph_option == "👥 Gender-Based Churn Analysis":
+      gender_df = df.groupby(['gender', 'Churn']).size().reset_index(name='count')
+      fig = px.sunburst(gender_df, path=['gender', 'Churn'], values='count',
+                      title="Churn Distribution Across Genders",
+                      color='Churn', color_discrete_map={'Yes': '#FFAA00', 'No': '#00A8E8'})
+      st.plotly_chart(fig, use_container_width=True)
+
+    elif graph_option == "📈 Tenure vs. Monthly Charges":
+        fig = px.scatter(df, x='tenure', y='MonthlyCharges', color='Churn',
+                     title="Churn Risk: Tenure vs. Monthly Charges",
+                     color_discrete_map={'Yes': '#D81B60', 'No': '#1E88E5'})
+        st.plotly_chart(fig, use_container_width=True)
+
+    elif graph_option == "📃 Contract Type & Churn Trends":
+        contract_df = df.groupby(['Contract', 'Churn']).size().reset_index(name='count')
+        fig = px.bar(contract_df, x='Contract', y='count', color='Churn',
+                 title="Churn Patterns by Contract Type",
+                 barmode='group', color_discrete_map={'Yes': '#FDD835', 'No': '#43A047'})
+        st.plotly_chart(fig, use_container_width=True)
+
+    elif graph_option == "💰 Preferred Payment Methods":
+        payment_df = df['PaymentMethod'].value_counts().reset_index()
+        payment_df.columns = ['PaymentMethod', 'count']
+
+        fig = px.treemap(payment_df, path=['PaymentMethod'], values='count',
+                     title="Customer Preferences for Payment Methods",
+                     color='count', color_continuous_scale='RdBu')
+        st.plotly_chart(fig, use_container_width=True)    
+    
+    # Retention Strategy Insights
+    st.markdown("### 📌 Retention Strategy:")
+    st.markdown("🔄 **Month-to-month contract users** churn the most, requiring incentives for long-term plans.")
+    st.markdown("💰 **High monthly charges** increase churn, highlighting the need for tiered pricing and bundled offers.") 
+    st.markdown("🛡️ **Customers without tech support and security services** are more likely to leave, making upselling crucial.")
+    st.markdown("💳 **Electronic check users** have the highest churn rate, necessitating a push for auto-payment adoption.")
+    st.markdown("⏳ **Longer tenure and higher total charges** reduce churn, emphasizing early engagement strategies.")
+    st.markdown("📊 **Customer Lifetime Value (CLV) distribution** is uneven, requiring targeted retention for high-value users.")
+    st.markdown("👥 **Gender and senior citizen status** have minimal impact on churn, shifting focus to behaviour-driven segmentation.")
+    
+    st.markdown("🚀 Leverage these insights to enhance retention strategies and minimize churn!")
+
+#Page 5  Model Evaluation
 elif option == "📈 Model Evaluation":
     st.write("## 📈 Model Evaluation Metrics")
     
