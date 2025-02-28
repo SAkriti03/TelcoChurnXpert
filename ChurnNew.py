@@ -848,6 +848,14 @@ if option == "🧩Client Persona Evaluation":
                      title="Customer Preferences for Payment Methods",
                      color='count', color_continuous_scale='RdBu')
         st.plotly_chart(fig, use_container_width=True)    
+
+    # High-Risk Customers
+    high_risk_customers = df[(df['tenure'] < 6) & (df['MonthlyCharges'] > 70) & (df['Contract'] == 'Month-to-month')]
+    st.write("### 🚨 High-Risk Customers", high_risk_customers)
+    st.download_button(label="📥 Download High-Risk Customers",
+                   data=high_risk_customers.to_csv(index=False).encode("utf-8"),
+                   file_name="high_risk_customers.csv",
+                   mime="text/csv")
     
     # Retention Strategy Insights
     st.markdown("### 📌 Retention Strategy:")
